@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="report.model.Play">
+	<parameterMap type="play" id="insertReviewID">
+		<parameter property="fileName" javaType="String" />
+		<parameter property="title" javaType="String" />
+		<parameter property="regdate" javaType="String" />
+		<parameter property="location" javaType="String" />
+		<parameter property="seat" javaType="String" />
+		<parameter property="price" javaType="int" />
+		<parameter property="review" javaType="String" />
+	</parameterMap>
+	<insert id="insertReview" parameterMap="insertReviewID">
+		INSERT INTO
+		PLAY(NO,
+		FILENAME, TITLE, REGDATE, LOCATION, SEAT, PRICE, REVIEW)
+		VALUES(PLAY_SEQ.NEXTVAL, ?, ?, TO_DATE(?), ?, ?, ?, ?)
+	</insert>
+	<resultMap type="play" id="searchDateID">
+		<result property="no" column="no" />
+		<result property="fileName" column="filename" />
+		<result property="title" column="title" />
+		<result property="regdate" column="regdate" />
+		<result property="location" column="location" />
+		<result property="seat" column="seat" />
+		<result property="price" column="price" />
+		<result property="review" column="review" />
+	</resultMap>
+	<sql id="playSQL">
+		SELECT NO, FILENAME, TITLE, TO_CHAR(REGDATE,'YYYYMMDD')
+		REGDATE, LOCATION,
+		SEAT, PRICE, REVIEW FROM PLAY
+	</sql>
+	<select id="searchDateAll" resultMap="searchDateID"
+		resultType="play">
+		<include refid="playSQL"></include>
+		ORDER BY REGDATE
+	</select>
+	<select id="searchDate" resultMap="searchDateID"
+		resultType="play">
+		<include refid="playSQL"></include>
+		WHERE TO_CHAR(REGDATE, 'YYYYMM')
+		= #{VALUE}
+		ORDER BY REGDATE
+	</select>
+	<select id="searchPlay" parameterType="java.lang.String"
+		resultType="play">
+		<include refid="playSQL"></include>
+		WHERE TO_CHAR(REGDATE, 'YYYYMMDD')
+		= #{VALUE}
+	</select>
+	<delete id="deletePlay" parameterType="java.lang.String">
+		DELETE FROM PLAY WHERE
+		TO_CHAR(REGDATE, 'YYYYMMDD') = #{VALUE}
+	</delete>
+	<update id="updatePlay" parameterType="play">
+		UPDATE PLAY SET
+		FILENAME =
+		#{fileName}, TITLE=#{title}, LOCATION=#{location},
+		SEAT=#{seat},
+		PRICE=#{price}, REVIEW=#{review}
+		WHERE TO_CHAR(REGDATE, 'YYYYMMDD') =
+		#{regdate}
+	</update>
+</mapper>
+
+
+
+
+
+
