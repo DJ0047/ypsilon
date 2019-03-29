@@ -13,7 +13,7 @@
 
 	Calendar calendar = Calendar.getInstance();
 	int[] today = {calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)};
-
+System.out.println(">> 될까???" + today[0]);
 	String id = request.getParameter("id");
 	String getDate = request.getParameter("getDate");
 	String fileName = request.getParameter("fileName");
